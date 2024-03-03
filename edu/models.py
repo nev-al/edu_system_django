@@ -1,7 +1,5 @@
-import django.db.models
 from django.db import models
 import uuid
-from datetime import datetime
 import time
 
 
@@ -22,7 +20,7 @@ class Product(models.Model):
         lst = []
         for i in self.group_set.all():
             lst.append(i.users.all())
-        return django.db.models.QuerySet.union(*lst)
+        return models.QuerySet.union(*lst) if len(lst) > 0 else models.QuerySet()
 
     def paid_users_without_group(self):
         return self.user_set.all().difference(self.united_users_from_all_group_by_product())
@@ -45,7 +43,7 @@ class Product(models.Model):
     def correct_group_qty(self):
         self.user_rearrangement()
         for i in self.group_set.all():
-            if i.size() < self.min_users_per_group:
+            if self.group_set.count() > 1 and i.size() < self.min_users_per_group:
                 i.delete()
                 self.user_rearrangement()
                 self.correct_group_qty()
