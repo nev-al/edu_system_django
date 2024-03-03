@@ -17,7 +17,7 @@ def delete_all_groups():
         product.delete()
 
 
-def generate_users(qty=100, paid_coeff_of_them=0.8):
+def generate_users(qty=27, paid_coeff_of_them=0.8):
     fake = Faker()
     for i in range(qty):
         u = User(name=fake.name())
@@ -39,10 +39,9 @@ def correct_all_groups_qty():
         i.correct_group_qty()
 
 
-if __name__ == '__main__':
-    # delete_all_users()
-    # delete_all_groups()
-    # generate_users()
-    # generate_groups()
-    correct_all_groups_qty()
+delete_all_users()
+delete_all_groups()
+generate_users()
+generate_groups()
+correct_all_groups_qty()
 

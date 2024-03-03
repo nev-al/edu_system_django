@@ -35,11 +35,16 @@ def statistics(request):
     for i in Product.objects.all():
         _json[f'{i.id}'] = {
             'Product': i.name,
-            'Paid users': i.user_set.count(),
+            'Paid Users': i.user_set.count(),
             'Students Qty': sum([j.size() for j in i.group_set.all()]),
+            'Max Groups': i.max_groups,
+            'Max Users per Group': i.max_users_per_group,
+            'Min Users per Group': i.min_users_per_group,
+            'Users in Each Group': str([j.size() for j in i.group_set.all()]),
             'Groups Qty': i.group_set.count(),
-            'Group fill percentage':
+            'Group Fill Percentage':
                 f'{mean([j.size() / i.max_users_per_group for j in i.group_set.all()]) * 100:.1f}%',
-            'Paid users percentage': f'{i.user_set.count() / User.objects.count() * 100:.1f}%'
+            'Paid Users Percentage': f'{i.user_set.count() / User.objects.count() * 100:.1f}%'
         }
+    _json['Platform Users'] = User.objects.count()
     return JsonResponse(_json)
